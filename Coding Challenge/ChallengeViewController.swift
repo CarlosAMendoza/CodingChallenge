@@ -9,6 +9,8 @@
 import UIKit
 
 class ChallengeViewController: UITableViewController {
+    
+    var mediaData : [Result?] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -17,6 +19,8 @@ class ChallengeViewController: UITableViewController {
         setupUI()
         
         tableView.register(MyCell.self, forCellReuseIdentifier: "MediaCell")
+        
+        downloadData()
     }
 
     func setupUI() {
@@ -35,21 +39,56 @@ class ChallengeViewController: UITableViewController {
         navigationController?.isToolbarHidden = false
         
         
-        
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 10 //TODO: Change
+        return mediaData.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "MediaCell", for: indexPath) as! MyCell
+        
+        cell.mediaImage.loadImage(from: mediaData[indexPath.row]?.artworkUrl100 ?? "")
         
         return cell
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 120
+    }
+    
+    func downloadData() {
+        if let url = URL(string: "https://rss.itunes.apple.com/api/v1/us/ios-apps/top-paid/all/50/explicit.json"){ //TODO: Make Variable
+            
+            //TODO: Add loading status
+            
+            URLSession.shared.dataTask(with: url) { (data, response, error) in
+                
+                if error != nil {
+                    print(error!)
+                    return
+                }
+                
+                if let data = data {
+                    do {
+                        let res = try JSONDecoder().decode([String:Feed].self, from: data)
+                        
+                        if let temp = res["feed"]?.results {
+                            self.mediaData = temp
+                        }
+                    } catch let error {
+                        print(error)
+                    }
+                }
+                
+                DispatchQueue.main.async {
+                    //TODO: Remove Loading
+                    self.tableView.reloadData()
+                }
+                
+                }.resume()
+            
+        }
     }
 
 }

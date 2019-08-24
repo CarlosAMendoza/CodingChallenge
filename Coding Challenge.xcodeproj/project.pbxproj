@@ -11,6 +11,8 @@
 		07DCE6562310CC3E00949F23 /* ChallengeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07DCE6552310CC3E00949F23 /* ChallengeViewController.swift */; };
 		07DCE65B2310CC4000949F23 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 07DCE65A2310CC4000949F23 /* Assets.xcassets */; };
 		07DCE65E2310CC4000949F23 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 07DCE65C2310CC4000949F23 /* LaunchScreen.storyboard */; };
+		07DCE6662310D64F00949F23 /* DataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07DCE6652310D64F00949F23 /* DataModel.swift */; };
+		07DCE6682310D89C00949F23 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07DCE6672310D89C00949F23 /* Extensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -20,6 +22,8 @@
 		07DCE65A2310CC4000949F23 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		07DCE65D2310CC4000949F23 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		07DCE65F2310CC4000949F23 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		07DCE6652310D64F00949F23 /* DataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataModel.swift; sourceTree = "<group>"; };
+		07DCE6672310D89C00949F23 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,6 +58,8 @@
 			children = (
 				07DCE6532310CC3E00949F23 /* AppDelegate.swift */,
 				07DCE6552310CC3E00949F23 /* ChallengeViewController.swift */,
+				07DCE6672310D89C00949F23 /* Extensions.swift */,
+				07DCE6652310D64F00949F23 /* DataModel.swift */,
 				07DCE65A2310CC4000949F23 /* Assets.xcassets */,
 				07DCE65C2310CC4000949F23 /* LaunchScreen.storyboard */,
 				07DCE65F2310CC4000949F23 /* Info.plist */,
@@ -133,6 +139,8 @@
 			files = (
 				07DCE6562310CC3E00949F23 /* ChallengeViewController.swift in Sources */,
 				07DCE6542310CC3E00949F23 /* AppDelegate.swift in Sources */,
+				07DCE6662310D64F00949F23 /* DataModel.swift in Sources */,
+				07DCE6682310D89C00949F23 /* Extensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
