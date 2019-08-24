@@ -9,9 +9,16 @@
 import Foundation
 import UIKit
 
+var iconCache = NSCache<AnyObject, AnyObject>()
+
 extension UIImageView {
     
     func loadImage(from url: String) {
+        
+        if let cache = iconCache.object(forKey: url as AnyObject) as? UIImage {
+            self.image = cache
+            return
+        }
         
         guard let url = URL(string: url) else { return }
         
@@ -24,6 +31,7 @@ extension UIImageView {
             
             guard let data = data else { return }
             if let image = UIImage(data: data){
+                iconCache.setObject(image, forKey: url as AnyObject)
                 DispatchQueue.main.async {
                     self.image = image
                 }

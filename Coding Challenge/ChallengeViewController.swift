@@ -133,7 +133,6 @@ class MyCell: UITableViewCell {
         let image = UIImageView(image: UIImage())
         image.translatesAutoresizingMaskIntoConstraints = false
         image.contentMode = .scaleAspectFit
-        image.backgroundColor = UIColor.green //TODO: Remove
         image.layer.cornerRadius = 12
         image.clipsToBounds = true
         return image
