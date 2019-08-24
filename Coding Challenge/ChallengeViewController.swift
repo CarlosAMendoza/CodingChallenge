@@ -11,6 +11,15 @@ import UIKit
 class ChallengeViewController: UITableViewController {
     
     var mediaData : [Result?] = []
+    
+    let urlString : [MediaType:String] =
+        [.Music:"https://rss.itunes.apple.com/api/v1/us/itunes-music/top-songs/all/50/explicit.json",
+        .App:"https://rss.itunes.apple.com/api/v1/us/ios-apps/top-paid/all/50/explicit.json",
+        .Show:"https://rss.itunes.apple.com/api/v1/us/tv-shows/top-tv-episodes/all/50/explicit.json"]
+    
+    let titles : [MediaType:String]  = [.Music:"Top Songs",.App:"Top Paid Apps", .Show:"Top TV Episodes"]
+    
+    var selectedList = MediaType.App
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,12 +40,19 @@ class ChallengeViewController: UITableViewController {
         tableView.backgroundColor = UIColor(red: 239/255, green: 239/255, blue: 239/255, alpha: 1)
         
         //Navigationbar Style
-        navigationItem.title = "Coding Challenge"
+        navigationItem.title = titles[.App]
         navigationController?.navigationBar.shadowImage = UIImage()
         navigationController?.navigationBar.barTintColor = UIColor(red: 239/255, green: 239/255, blue: 239/255, alpha: 1)
         
         //ToolBar Setup
         navigationController?.isToolbarHidden = false
+        
+        let items = [flex,music,flex,app,flex,shows,flex]
+        music.customView?.tintColor = .lightGray
+        app.customView?.tintColor = .blue
+        shows.customView?.tintColor = .lightGray
+        
+        toolbarItems = items
         
         //Loading Indicator Setup
         let window = UIApplication.shared.keyWindow!
@@ -85,7 +101,7 @@ class ChallengeViewController: UITableViewController {
     }
     
     func downloadData() {
-        if let url = URL(string: "https://rss.itunes.apple.com/api/v1/us/ios-apps/top-paid/all/50/explicit.json"){ //TODO: Make Variable
+        if let url = URL(string: urlString[selectedList]!) {
             
             loadIndicator.startAnimating()
             
@@ -122,6 +138,52 @@ class ChallengeViewController: UITableViewController {
         iconCache.removeAllObjects()
         
     }
+    
+    func updateToolBar() {
+        
+        toolbarItems?.forEach({ (item) in
+            item.customView?.tintColor = .lightGray
+        })
+        
+        
+    }
+    
+    @objc func musicTapped(sender: Any){
+        if selectedList != .Music {
+            updateToolBar()
+            music.customView?.tintColor = .blue
+            selectedList = .Music
+            downloadData()
+            navigationItem.title = titles[selectedList]
+        }
+    }
+    
+    @objc func appTapped(){
+        if selectedList != .App {
+            updateToolBar()
+            app.customView?.tintColor = .blue
+            selectedList = .App
+            downloadData()
+            navigationItem.title = titles[selectedList]
+        }
+    }
+    
+    @objc func showTapped(){
+        if selectedList != .Show {
+            updateToolBar()
+            shows.customView?.tintColor = .blue
+            selectedList = .Show
+            downloadData()
+            navigationItem.title = titles[selectedList]
+        }
+    }
+    
+    
+    let flex = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
+    lazy var music = UIBarButtonItem.menuButton(self, action: #selector(musicTapped), imageName: "music")
+    lazy var app = UIBarButtonItem.menuButton(self, action: #selector(appTapped), imageName: "app")
+    lazy var shows = UIBarButtonItem.menuButton(self, action: #selector(showTapped), imageName: "show")
+    
 
 }
 
