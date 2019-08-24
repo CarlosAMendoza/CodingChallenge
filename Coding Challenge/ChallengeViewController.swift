@@ -38,8 +38,27 @@ class ChallengeViewController: UITableViewController {
         //ToolBar Setup
         navigationController?.isToolbarHidden = false
         
+        //Loading Indicator Setup
+        let window = UIApplication.shared.keyWindow!
         
+        window.addSubview(loadIndicator)
+        window.bringSubviewToFront(loadIndicator)
+        
+        loadIndicator.centerYAnchor.constraint(equalTo: window.centerYAnchor).isActive = true
+        loadIndicator.centerXAnchor.constraint(equalTo: window.centerXAnchor).isActive = true
+        loadIndicator.heightAnchor.constraint(equalToConstant: 75).isActive = true
+        loadIndicator.widthAnchor.constraint(equalTo: loadIndicator.heightAnchor).isActive = true
     }
+    
+    let loadIndicator :UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: 75, height: 75))
+        indicator.style = .whiteLarge
+        indicator.layer.cornerRadius = 8
+        indicator.layer.backgroundColor = UIColor.lightGray.cgColor
+        indicator.hidesWhenStopped = true
+        indicator.translatesAutoresizingMaskIntoConstraints = false
+        return indicator
+    }()
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return mediaData.count
@@ -47,6 +66,10 @@ class ChallengeViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "MediaCell", for: indexPath) as! MyCell
+        
+        cell.nameLabel.text = mediaData[indexPath.row]?.name ?? "Error"
+        cell.authorLabel.text = mediaData[indexPath.row]?.artistName ?? "Error"
+        cell.mediaTypeLabel.text = mediaData[indexPath.row]?.kind ?? "Error" //TODO: Improve
         
         cell.mediaImage.loadImage(from: mediaData[indexPath.row]?.artworkUrl100 ?? "")
         
@@ -57,10 +80,14 @@ class ChallengeViewController: UITableViewController {
         return 120
     }
     
+    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        cell.contentView.layer.masksToBounds = true
+    }
+    
     func downloadData() {
         if let url = URL(string: "https://rss.itunes.apple.com/api/v1/us/ios-apps/top-paid/all/50/explicit.json"){ //TODO: Make Variable
             
-            //TODO: Add loading status
+            loadIndicator.startAnimating()
             
             URLSession.shared.dataTask(with: url) { (data, response, error) in
                 
@@ -82,13 +109,18 @@ class ChallengeViewController: UITableViewController {
                 }
                 
                 DispatchQueue.main.async {
-                    //TODO: Remove Loading
+                    self.loadIndicator.stopAnimating()
                     self.tableView.reloadData()
                 }
                 
                 }.resume()
             
         }
+    }
+    
+    override func didReceiveMemoryWarning() {
+        iconCache.removeAllObjects()
+        
     }
 
 }
@@ -123,7 +155,6 @@ class MyCell: UITableViewCell {
     
     let nameLabel : UILabel = {
         let label = UILabel()
-        label.text = "Name Label"
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.preferredFont(forTextStyle: .headline)
         return label
@@ -140,7 +171,6 @@ class MyCell: UITableViewCell {
     
     let authorLabel : UILabel = {
         let label = UILabel()
-        label.text = "Author Label"
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.preferredFont(forTextStyle: .footnote)
         label.textColor = UIColor.gray
@@ -152,7 +182,6 @@ class MyCell: UITableViewCell {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.preferredFont(forTextStyle: .caption1)
         label.textColor = UIColor.lightGray
-        label.text = "Media Type"
         return label
     }()
     
