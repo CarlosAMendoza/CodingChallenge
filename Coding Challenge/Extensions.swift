@@ -11,7 +11,9 @@ import UIKit
 
 var iconCache = NSCache<AnyObject, AnyObject>()
 
-extension UIImageView {
+class CustomImageView: UIImageView {
+    
+    var imageURL : String = ""
     
     func loadImage(from url: String) {
         
@@ -19,6 +21,8 @@ extension UIImageView {
             self.image = cache
             return
         }
+        
+        image = nil
         
         guard let url = URL(string: url) else { return }
         
@@ -31,9 +35,14 @@ extension UIImageView {
             
             guard let data = data else { return }
             if let image = UIImage(data: data){
-                iconCache.setObject(image, forKey: url as AnyObject)
+                iconCache.setObject(image, forKey: url.absoluteString as AnyObject)
+
                 DispatchQueue.main.async {
-                    self.image = image
+                    if self.imageURL == url.absoluteString {
+                        self.image = image
+                    } else {
+                    self.image = nil
+                    }
                 }
             }
             

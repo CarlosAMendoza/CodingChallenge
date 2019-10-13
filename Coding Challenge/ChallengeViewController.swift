@@ -87,6 +87,7 @@ class ChallengeViewController: UITableViewController {
         cell.authorLabel.text = mediaData[indexPath.row]?.artistName ?? "Error"
         cell.mediaTypeLabel.text = mediaData[indexPath.row]?.kind ?? "Error" //TODO: Improve
         
+        cell.mediaImage.imageURL = mediaData[indexPath.row]?.artworkUrl100 ?? ""
         cell.mediaImage.loadImage(from: mediaData[indexPath.row]?.artworkUrl100 ?? "")
         
         return cell
@@ -222,8 +223,8 @@ class MyCell: UITableViewCell {
         return label
     }()
     
-    let mediaImage : UIImageView = {
-        let image = UIImageView(image: UIImage())
+    let mediaImage : CustomImageView = {
+        let image = CustomImageView(image: UIImage())
         image.translatesAutoresizingMaskIntoConstraints = false
         image.contentMode = .scaleAspectFit
         image.layer.cornerRadius = 12
